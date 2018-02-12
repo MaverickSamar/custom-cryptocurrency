@@ -1,0 +1,26 @@
+[
+  {
+    "id": 0,
+    "name": "Eagles",
+    "picture": "images/eagles.png",
+    "party": "Philadelphia"
+  },
+  {
+    "id": 1,
+    "name": "Patriots",
+    "picture": "images/patriots.png",
+    "party": "New England"
+  },
+  {
+    "id": 2,
+    "name": "Jaguars",
+    "picture": "images/jaguars.png",
+    "party": "Jacksonville"
+  },
+  {
+    "id": 3,
+    "name": "Vikings",
+    "picture": "images/vikings.png",
+    "party": "Minnesota"
+  }
+]
