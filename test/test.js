@@ -39,15 +39,26 @@ contract('CoinContract', function (accounts) {
 	});
 
 	it("should NOT create money", function() {
-		return coinInstance.mint(accounts[1], coin_to_send[0], {from: accounts[1]}).then(function (result) {
-			assert.equal('0x00', result.receipt.status, 'money not created');
-		});
-	});
+    return coinInstance.mint(accounts[1], coin_to_send[0], {from: accounts[1]}).then(function (result) {
+      throw("modifer not working");
+    }).catch(function (e) {
+      if(e === "modifer not working") {
+        assert(false);
+      } else {
+        assert(true);
+      }
+    })
+  });
 
 	it("should NOT transfer money", function() {
 		return coinInstance.transfer(accounts[3], coins[0], {from: accounts[1]}).then(function (result) {
-			assert.equal('0x00', result.receipt.status, 'money not transfered');
-		})
-	});
-
+      throw("modifer not working");
+    }).catch(function (e) {
+      if(e === "modifer not working") {
+        assert(false);
+      } else {
+        assert(true);
+      }
+    })
+  });
 });
