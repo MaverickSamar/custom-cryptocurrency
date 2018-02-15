@@ -39,31 +39,31 @@ App = {
       App.currentAccount = web3.eth.coinbase;
      jQuery('#current_account').text("Current account : "+web3.eth.coinbase);
       App.handleEvents();
-    return App.bindEvents();  
+    return App.bindEvents();
     //});
-    
+
   });
     //return App.bindEvents();
   },
 
   bindEvents: function() {
-    
+
     $(document).on('click', '#create_money', function(){ App.handleCreateMoney(jQuery('#enter_create_address').val(),jQuery('#create_amount').val()); });
     $(document).on('click', '#send_money', function(){ App.handleSendMoney(jQuery('#enter_send_address').val(),jQuery('#send_amount').val()); });
     $(document).on('click', '#balance', function(){ App.checkBalance(); });
   },
 
-  
+
 populateAddress : function(){
- new Web3(new Web3.providers.HttpProvider('http://localhost:7545')).eth.getAccounts((err, accounts) => { 
+ new Web3(new Web3.providers.HttpProvider('http://localhost:7545')).eth.getAccounts((err, accounts) => {
   jQuery.each(accounts,function(i){
     var optionElement = '<option value="'+accounts[i]+'">'+accounts[i]+'</option';
     jQuery('#enter_create_address').append(optionElement);
     jQuery('#enter_send_address').append(optionElement);
   });
 
-  
-  
+
+
   });
 },
 
@@ -78,7 +78,7 @@ handleEvents : function(){
     event.watch(function(error,result) {
 
       if(result.transactionHash != App.transaction){
-        App.transaction = result.transactionHash;  
+        App.transaction = result.transactionHash;
         var text = 'Coin transfer: ' + result.args.amount +
             ' coins were sent from ' + result.args.from +
             ' to ' + result.args.to + '.';
@@ -87,7 +87,7 @@ handleEvents : function(){
         setTimeout(function(){jQuery('#show_event').animate({'right':'-410px'},500)}, 5000);
 
       }
-     
+
 })
 });
 },
@@ -110,7 +110,7 @@ handleCreateMoney: function(addr,value){
     }
 
     var coinInstance;
-    
+
     App.contracts.vote.deployed().then(function(instance) {
       coinInstance = instance;
 
@@ -122,13 +122,13 @@ handleCreateMoney: function(addr,value){
         alert("Creation Failed")
     }).catch( function(err){
       console.log(err.message);
-    })  
+    })
 
 },
 
 // handling the vote
   handleSendMoney: function(addr,value) {
-    
+
     var coinInstance;
     App.contracts.vote.deployed().then(function(instance) {
       coinInstance = instance;
@@ -141,7 +141,7 @@ handleCreateMoney: function(addr,value){
         alert("Transfer failed");
     }).catch( function(err){
       console.log(err.message);
-    })  
+    })
   },
 
   checkBalance : function(){
