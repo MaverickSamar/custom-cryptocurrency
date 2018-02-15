@@ -16,7 +16,7 @@ App = {
       App.web3Provider = web3.currentProvider;
     } else {
       // If no injected web3 instance is detected, fallback to the TestRPC
-      App.web3Provider = new Web3.providers.HttpProvider('http://127.0.0.1:7545');
+      App.web3Provider = new Web3.providers.HttpProvider('http://127.0.0.1:9545');
     }
     web3 = new Web3(App.web3Provider);
     App.populateAddress();
@@ -55,7 +55,7 @@ App = {
 
 
 populateAddress : function(){
- new Web3(new Web3.providers.HttpProvider('http://localhost:7545')).eth.getAccounts((err, accounts) => {
+ new Web3(new Web3.providers.HttpProvider('http://localhost:9545')).eth.getAccounts((err, accounts) => {
   jQuery.each(accounts,function(i){
     var optionElement = '<option value="'+accounts[i]+'">'+accounts[i]+'</option';
     jQuery('#enter_create_address').append(optionElement);
