@@ -38,7 +38,7 @@ App = {
         App.currentAccount = web3.eth.coinbase;
         jQuery('#current_account').text("Current account : "+web3.eth.coinbase);
         jQuery('#curr_account').text(web3.eth.coinbase);
-        App.handleEvents();
+        //App.handleEvents();
       return App.bindEvents();
       });
   },
@@ -64,16 +64,18 @@ App = {
     });
   },
 
-  handleEvents : function(){
+  /* Replaced by event handling with result */
+  /*handleEvents : function(){
     var coinInstance;
     App.contracts.vote.deployed().then(function(instance) {
       coinInstance = instance;
       var option = {
-        "fromBlock": "latest"
+        "toBlock":0
       };
       var event = coinInstance.allEvents(option);
       event.watch(function(error,result) {
         console.log("yes event");
+        console.log(result);
         if(result.transactionHash != App.transaction){
           App.transaction = result.transactionHash;
           var text = 'Coin transfer: ' + result.args.amount +
@@ -86,7 +88,7 @@ App = {
         }
       })
     });
-  },
+  },*/
 
   getMinter : function(){
     App.contracts.vote.deployed().then(function(instance) {
@@ -132,15 +134,37 @@ App = {
 
   handleSendMoney: function(addr,value) {
 
+    if(addr == ""){
+      alert("Please select an adrdess");
+      return false;
+    }
+    if(value == ""){
+      alert("Please enter valid amount");
+      return false;
+    }
     var coinInstance;
     App.contracts.vote.deployed().then(function(instance) {
       coinInstance = instance;
       return coinInstance.transfer(addr,value);
     }).then( function(result){
-      if(result.receipt.status == '0x01')
-        alert(value +" coins tranfered successfully transfered to "+addr);
-      else
+      if(result.receipt.status != '0x01')
           alert("Transfer failed");
+      for (var i = 0; i < result.logs.length; i++) {
+        var log = result.logs[i];
+        var singularText = "coins were";
+        if(log.args.amount == 1){
+          singularText = "coin was";
+        }
+        if (log.event == "Sent") {
+          var text = 'Coin transfer: ' + log.args.amount + " " +singularText + 
+              ' sent from ' + log.args.from +
+              ' to ' + log.args.to + '.';
+          jQuery('#showmessage_text').html(text);
+          jQuery('#show_event').animate({'right':'10px'});
+          setTimeout(function(){jQuery('#show_event').animate({'right':'-410px'},500)}, 5000);
+          break;
+        }
+      }
     }).catch( function(err){
       console.log(err.message);
     })
