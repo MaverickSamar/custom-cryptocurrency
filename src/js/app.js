@@ -45,35 +45,37 @@ App = {
 
   bindEvents: function() {
 
-    $(document).on('click', '#create_money', function(){ App.handleCreateMoney(jQuery('#enter_create_address').val(),jQuery('#create_amount').val()); });
-    $(document).on('click', '#send_money', function(){ App.handleSendMoney(jQuery('#enter_send_address').val(),jQuery('#send_amount').val()); });
-    $(document).on('click', '#balance', function(){ App.checkBalance(); });
+    $(document).on('click', '#create_money', function(){ App.handleMint(jQuery('#enter_create_address').val(),jQuery('#create_amount').val()); });
+    $(document).on('click', '#send_money', function(){ App.handleTransfer(jQuery('#enter_send_address').val(),jQuery('#send_amount').val()); });
+    $(document).on('click', '#balance', function(){ App.handleBalance(); });
   },
 
 
-  populateAddress : function(){
+  populateAddress : function(){ 
  
     new Web3(new Web3.providers.HttpProvider('http://localhost:9545')).eth.getAccounts((err, accounts) => {
       jQuery.each(accounts,function(i){
-        if(web3.eth.coinbase != accounts[i]){  
-          var optionElement = '<option value="'+accounts[i]+'">'+accounts[i]+'</option';
+        var optionElement = '<option value="'+accounts[i]+'">'+accounts[i]+'</option';
+            //jQuery('#enter_create_address').append(optionElement);
+            //jQuery('#enter_send_address').append(optionElement);  
           jQuery('#enter_create_address').append(optionElement);
-          jQuery('#enter_send_address').append(optionElement);  
-        }
+          if(web3.eth.coinbase != accounts[i]){
+            jQuery('#enter_send_address').append(optionElement);  
+          }
       });
     });
   },
 
   /* Replaced by event handling with result */
-  /*handleEvents : function(){
+  handleEvents : function(){
     var coinInstance;
     App.contracts.vote.deployed().then(function(instance) {
       coinInstance = instance;
-      var option = {
-        "toBlock":0
-      };
-      var event = coinInstance.allEvents(option);
-      event.watch(function(error,result) {
+      coinInstance.Sent().watch(function(err,result){
+          console.log(result);
+      });
+      
+      /*event.watch(function(error,result) {
         console.log("yes event");
         console.log(result);
         if(result.transactionHash != App.transaction){
@@ -86,9 +88,9 @@ App = {
           setTimeout(function(){jQuery('#show_event').animate({'right':'-410px'},500)}, 5000);
 
         }
-      })
+      })*/
     });
-  },*/
+  },
 
   getMinter : function(){
     App.contracts.vote.deployed().then(function(instance) {
@@ -108,7 +110,7 @@ App = {
     })
   },
 
-  handleCreateMoney: function(addr,value){
+  handleMint: function(addr,value){
 
       if(App.currentAccount != App.minter){
         alert("Not Authorised to create coin");
@@ -132,7 +134,7 @@ App = {
   },
 
 
-  handleSendMoney: function(addr,value) {
+  handleTransfer: function(addr,value) {
 
     if(addr == ""){
       alert("Please select an adrdess");
@@ -142,6 +144,7 @@ App = {
       alert("Please enter valid amount");
       return false;
     }
+
     var coinInstance;
     App.contracts.vote.deployed().then(function(instance) {
       coinInstance = instance;
@@ -161,21 +164,26 @@ App = {
               ' to ' + log.args.to + '.';
           jQuery('#showmessage_text').html(text);
           jQuery('#show_event').animate({'right':'10px'});
-          setTimeout(function(){jQuery('#show_event').animate({'right':'-410px'},500)}, 5000);
+          setTimeout(function(){jQuery('#show_event').animate({'right':'-410px'},500)}, 15000);
           break;
         }
       }
+      return coinInstance.balances(App.currentAccount);
+    }).then(function(result) {
+        console.log("---->"+result.toNumber());
     }).catch( function(err){
       console.log(err.message);
     })
   },
 
-  checkBalance : function(){
+  handleBalance : function(){
+    console.log('1asasda1');
     App.contracts.vote.deployed().then(function(instance) {
       coinInstance = instance;
       return coinInstance.balances(App.currentAccount);
     }).then(function(result) {
-      alert("Current Balance : "+result.toNumber());
+      console.log(result);
+      jQuery('#display_balance').val(result.toNumber());
     })
   }
 };

@@ -18,7 +18,7 @@
     <![endif]-->
   </head>
   <body>
-    <div id="show_event" style="position:absolute;top:37px;right:-410px;width: 400px; height: 92px; border-radius: 10px 10px 10px 10px;position: fixed;color: #00c3ab;padding-right: 10px;background: #ffffff;text-align: center;overflow: hidden;border: 1px solid;margin:0 auto;">
+    <div id="show_event" style="position:absolute;top:37px;right:-410px;width: 400px; height: 92px; border-radius: 10px 10px 10px 10px;position: fixed;color: #04ce04;padding-right: 10px;background: #ffffff;text-align: center;overflow: hidden;border: 1px solid;margin:0 auto;">
       <span  id="showmessage_text" style="float: left;padding: 10px;"></span>
     </div>
     <div class="container">
@@ -45,12 +45,15 @@
           <span> Account : </span>
           <span id="curr_account"></span>
     </div>
-    
-    <button id="balance" style="margin-top: 120px;" class="btn btn-info" type="button" id="create_money">Balance</button>
+    <div>
+      <span>Balance : </span>
+      <input disabled type="text" id="display_balance" style="margin-top: 40px;">
+    </div>
+    <button id="balance" style="margin-top: 40px;" class="btn btn-info" type="button" id="create_money">Balance</button>
   </div>
 
   <div class="column" id="create_coin"  style="float: left;width: 40%;padding: 10px;height: 300px; border-right: 1px solid #00000040">
-    <h2>Create Coin</h2>
+    <h2>Mint Coin</h2>
     <div style="margin-top: 40px;">
           <span> To : </span>
           <select id="enter_create_address" value="">
@@ -61,7 +64,7 @@
       <span>Amount : </span>
       <input type="number" id="create_amount" style="margin-top: 40px;" >
     </div>
-    <button style="margin-top: 40px;" class="btn btn-info" type="button" id="create_money">Create</button>
+    <button style="margin-top: 40px;" class="btn btn-info" type="button" id="create_money">Mint</button>
   </div>
 
   <div class="column" id="send_coin" style="float: left;width: 30%;padding: 10px;height: 300px;">
