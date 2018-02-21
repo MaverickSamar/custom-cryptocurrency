@@ -31,15 +31,11 @@ App = {
 
     // Set the provider for our contract
         App.contracts.vote.setProvider(App.web3Provider);
-
-    // Use our contract to retrieve and mark the voted pets
-    
         App.getMinter();
         App.currentAccount = web3.eth.coinbase;
         jQuery('#current_account').text("Current account : "+web3.eth.coinbase);
         jQuery('#curr_account').text(web3.eth.coinbase);
-        //App.handleEvents();
-      return App.bindEvents();
+        return App.bindEvents();
       });
   },
 
@@ -56,39 +52,11 @@ App = {
     new Web3(new Web3.providers.HttpProvider('http://localhost:9545')).eth.getAccounts((err, accounts) => {
       jQuery.each(accounts,function(i){
         var optionElement = '<option value="'+accounts[i]+'">'+accounts[i]+'</option';
-            //jQuery('#enter_create_address').append(optionElement);
-            //jQuery('#enter_send_address').append(optionElement);  
           jQuery('#enter_create_address').append(optionElement);
           if(web3.eth.coinbase != accounts[i]){
             jQuery('#enter_send_address').append(optionElement);  
           }
       });
-    });
-  },
-
-  /* Replaced by event handling with result */
-  handleEvents : function(){
-    var coinInstance;
-    App.contracts.vote.deployed().then(function(instance) {
-      coinInstance = instance;
-      coinInstance.Sent().watch(function(err,result){
-          console.log(result);
-      });
-      
-      /*event.watch(function(error,result) {
-        console.log("yes event");
-        console.log(result);
-        if(result.transactionHash != App.transaction){
-          App.transaction = result.transactionHash;
-          var text = 'Coin transfer: ' + result.args.amount +
-              ' coins were sent from ' + result.args.from +
-              ' to ' + result.args.to + '.';
-          jQuery('#showmessage_text').html(text);
-          jQuery('#show_event').animate({'right':'10px'});
-          setTimeout(function(){jQuery('#show_event').animate({'right':'-410px'},500)}, 5000);
-
-        }
-      })*/
     });
   },
 
@@ -116,9 +84,7 @@ App = {
         alert("Not Authorised to create coin");
         return false;
       }
-
       var coinInstance;
-
       App.contracts.vote.deployed().then(function(instance) {
         coinInstance = instance;
 
@@ -150,6 +116,9 @@ App = {
       coinInstance = instance;
       return coinInstance.transfer(addr,value);
     }).then( function(result){
+
+      // Watching Events 
+      
       if(result.receipt.status != '0x01')
           alert("Transfer failed");
       for (var i = 0; i < result.logs.length; i++) {
@@ -158,6 +127,9 @@ App = {
         if(log.args.amount == 1){
           singularText = "coin was";
         }
+        
+        // Look for the event Sent
+        // Notification 
         if (log.event == "Sent") {
           var text = 'Coin transfer: ' + log.args.amount + " " +singularText + 
               ' sent from ' + log.args.from +
@@ -169,20 +141,16 @@ App = {
         }
       }
       return coinInstance.balances(App.currentAccount);
-    }).then(function(result) {
-        console.log("---->"+result.toNumber());
     }).catch( function(err){
       console.log(err.message);
     })
   },
 
   handleBalance : function(){
-    console.log('1asasda1');
     App.contracts.vote.deployed().then(function(instance) {
       coinInstance = instance;
       return coinInstance.balances(App.currentAccount);
     }).then(function(result) {
-      console.log(result);
       jQuery('#display_balance').val(result.toNumber());
     })
   }
