@@ -6,6 +6,7 @@ App = {
   currentAccount:null,
   transaction:0,
   flag:false,
+  
   init: function() {
     return App.initWeb3();
   },
@@ -46,7 +47,6 @@ App = {
     $(document).on('click', '#balance', function(){ App.handleBalance(); });
   },
 
-
   populateAddress : function(){ 
  
     new Web3(new Web3.providers.HttpProvider('http://localhost:9545')).eth.getAccounts((err, accounts) => {
@@ -79,7 +79,6 @@ App = {
   },
 
   handleMint: function(addr,value){
-
       if(App.currentAccount != App.minter){
         alert("Not Authorised to create coin");
         return false;
@@ -99,9 +98,7 @@ App = {
       })
   },
 
-
   handleTransfer: function(addr,value) {
-
     if(addr == ""){
       alert("Please select an adrdess");
       return false;
@@ -160,6 +157,5 @@ App = {
 $(function() {
   $(window).load(function() {
     App.init();
-    console.log('starting app.js');
   });
 });
